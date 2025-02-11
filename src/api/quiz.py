@@ -1,5 +1,7 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
+from sqlalchemy.ext.asyncio import AsyncSession
 
+from src.core.database.connection import get_db
 from src.core.schemas.question import QuestionResponseData, QuestionInputData
 from src.core.services.questions import QuestionService
 
@@ -20,5 +22,5 @@ quiz_router = APIRouter(
     - Возвращает предыдущий вопрос для викторины
     """
 )
-async def get_quiz_questions(request: QuestionInputData):
-    return await QuestionService.get_questions(request)
+async def get_quiz_questions(data: QuestionInputData, db: AsyncSession = Depends(get_db)):
+    return await QuestionService.get_questions(data, db)

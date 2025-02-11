@@ -9,20 +9,17 @@ from src.core.repositories.questions import QuestionRepository
 from src.core.schemas.question import QuestionInputData, QuestionResponseData
 
 
-QUESTION_URL = "https://jservice.io/api/random?count=1"
-
-
 class QuestionService:
 
     @staticmethod
-    async def get_questions(request: QuestionInputData, db: AsyncSession = Depends(get_db)):
+    async def get_questions(request: QuestionInputData, db: AsyncSession):
         logging.info(f"Отправлен запрос на получение {request.questions_num} вопросов.")
         async with ClientSession() as session:
             questions = []
             while len(questions) < request.questions_num:
                 try:
-                    logging.debug(f"Запрос данных на адрес {QUESTION_URL}")
-                    async with session.get(QUESTION_URL) as response:
+                    logging.debug(f"Запрос данных на адрес 'https://jservice.io/api/random'")
+                    async with session.get(f"https://jservice.io/api/random?count={request.questions_num}") as response:
                         if response.status != 200:
                             logging.error(f"Ошибка получения данных. Код ошибки: {response.status}")
                             raise HTTPException(status_code=503, detail="Квиз сервис не доступен")
