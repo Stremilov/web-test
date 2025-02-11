@@ -32,3 +32,5 @@ DATABASE_NAME=quiz
 DATABASE_HOST=db
 DATABASE_PORT=5432
 ```
+3. В терминале в корне проекта использовать команду:
+```docker compose up -d --build```
